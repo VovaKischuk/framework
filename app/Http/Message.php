@@ -24,6 +24,7 @@ class Message implements MessageInterface
     {
         $new = clone $this;
         $new->protocolVersion = $version;
+
         return $new;
     }
 
@@ -53,6 +54,7 @@ class Message implements MessageInterface
 
         $new = clone $this;
         $new->headers[\strtolower($name)] = $value;
+
         return $new;
     }
 
@@ -76,6 +78,7 @@ class Message implements MessageInterface
     {
         $new = clone $this;
         unset($new->headers[\strtolower($name)]);
+
         return $new;
     }
 
@@ -88,6 +91,7 @@ class Message implements MessageInterface
     {
         $new = clone $this;
         $new->body = $body;
+
         return $new;
     }
 

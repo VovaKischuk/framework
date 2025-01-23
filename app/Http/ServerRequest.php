@@ -66,6 +66,7 @@ class ServerRequest extends Request implements ServerRequestInterface
     {
         $clone = clone $this;
         $clone->setUploadedFiles($uploadedFiles);
+
         return $clone;
     }
 
@@ -92,6 +93,7 @@ class ServerRequest extends Request implements ServerRequestInterface
 
         $clone = clone $this;
         $clone->parsedBody = $data;
+
         return $clone;
     }
 
@@ -109,6 +111,7 @@ class ServerRequest extends Request implements ServerRequestInterface
     {
         $clone = clone $this;
         $clone->attributes[$name] = $value;
+
         return $clone;
     }
 
@@ -116,6 +119,7 @@ class ServerRequest extends Request implements ServerRequestInterface
     {
         $clone = clone $this;
         unset($clone->attributes[$name]);
+
         return $clone;
     }
 }

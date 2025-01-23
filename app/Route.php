@@ -2,20 +2,20 @@
 
 namespace Framework;
 
+use Doctrine\ORM\EntityManager;
 use Framework\Middleware\MiddlewareInterface;
-use Psr\Container\ContainerExceptionInterface;
-use Psr\Container\NotFoundExceptionInterface;
+use Framework\Response\ApiResponse;
+use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use Framework\Http\Response;
 
 class Route
 {
     private array $routes = [];
     private array $middleware = [];
 
-    public function __construct()
-    {
-    }
+    public function __construct(
+        private readonly ContainerInterface $container
+    ) {}
 
     public function addRoute($method, $path, $handler): void
     {
@@ -27,31 +27,44 @@ class Route
         $this->middleware[] = $middleware;
     }
 
-    /**
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
-     */
-    public function dispatch(Request $request): Response
+    public function dispatch(Request $request): ApiResponse
     {
-        $method = $request->getMethod();
-        $path = $request->getUri()->getPath();
-        if (!isset($this->routes[$path][$method])) {
-            return new Response(404, [], 'Not Found');
-        }
+        try {
+            $method = $request->getMethod();
+            $path = $request->getUri()->getPath();
 
-        if (
-            isset($this->routes[$path][$method]['middleware'])
-            && $this->routes[$path][$method]['middleware'] === false
-        ) {
-            return $this->sendResponse($request);
-        }
+            foreach ($this->routes as $routePath => $methods) {
+                $params = [];
 
-        return $this->processMiddleware($request, function ($request) {
-            return $this->sendResponse($request);
-        });
+                if ($this->matchRoute($routePath, $path, $params)) {
+                    if (!isset($methods[$method])) {
+                        return ApiResponse::empty(404);
+                    }
+
+                    foreach ($params as $key => $value) {
+                        $request = $request->withAttribute($key, $value);
+                    }
+
+                    if (
+                        isset($methods[$method]['middleware'])
+                        && $methods[$method]['middleware'] === false
+                    ) {
+                        return $this->sendResponse($request);
+                    }
+
+                    return $this->processMiddleware($request, function ($request) {
+                        return $this->sendResponse($request);
+                    });
+                }
+            }
+
+            return ApiResponse::empty(404);
+        } catch (\Throwable $exception) {
+            dd($exception->getMessage() . ' ' . $exception->getLine());
+        }
     }
 
-    private function processMiddleware(Request $request, callable $core): Response
+    private function processMiddleware(Request $request, callable $core): ApiResponse
     {
         $layer = array_reduce(
             array_reverse($this->middleware),
@@ -66,14 +79,58 @@ class Route
         return $layer($request);
     }
 
-    private function sendResponse(Request $request): Response
+    private function sendResponse(Request $request): ApiResponse
     {
-        $method = $request->getMethod();
-        $path = $request->getUri()->getPath();
+        try {
+            $method = $request->getMethod();
+            $path = $request->getUri()->getPath();
+            $matchedRoute = null;
+            $params = [];
 
-        [$controller, $method] = $this->routes[$path][$method];
-        $controller = new $controller();
+            foreach ($this->routes as $routePath => $methods) {
+                if ($this->matchRoute($routePath, $path, $params)) {
+                    if (!isset($methods[$method])) {
+                        throw new \Exception("Method not allowed for this route.");
+                    }
 
-        return $controller->$method($request);
+                    $matchedRoute = $methods[$method];
+                    break;
+                }
+            }
+
+            if (!$matchedRoute) {
+                throw new \Exception("No route found for the requested path.");
+            }
+
+            [$controller, $actionMethod] = $matchedRoute;
+            $controller = new $controller($this->container->get(EntityManager::class));
+
+            return $controller->$actionMethod($request, $params);
+        } catch (\Throwable $exception) {
+            dd($exception->getMessage() . ' ' . $exception->getLine() . ' ' . $exception->getFile());
+        }
+    }
+
+    private function matchRoute(string $routePath, string $requestPath, ?array &$params = []): bool
+    {
+        $routeParts = explode('/', trim($routePath, '/'));
+        $pathParts = explode('/', trim($requestPath, '/'));
+
+        if (count($routeParts) !== count($pathParts)) {
+            return false;
+        }
+
+        $params = [];
+
+        foreach ($routeParts as $index => $part) {
+            if (str_starts_with($part, '{') && str_ends_with($part, '}')) {
+                $paramName = trim($part, '{}');
+                $params[$paramName] = $pathParts[$index];
+            } elseif ($part !== $pathParts[$index]) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

@@ -110,6 +110,7 @@ class Stream implements StreamInterface
         if ($result === false) {
             throw new RuntimeException('Failed to write to the stream');
         }
+
         return $result;
     }
 
@@ -127,6 +128,7 @@ class Stream implements StreamInterface
         if ($result === false) {
             throw new RuntimeException('Failed to read from the stream');
         }
+
         return $result;
     }
 
@@ -139,6 +141,7 @@ class Stream implements StreamInterface
         if ($contents === false) {
             throw new RuntimeException('Failed to get contents from the stream');
         }
+
         return $contents;
     }
 
@@ -151,6 +154,7 @@ class Stream implements StreamInterface
         if (\is_null($key)) {
             return $meta;
         }
+
         return $meta[$key] ?? null;
     }
 }

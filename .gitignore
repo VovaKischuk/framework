@@ -1,0 +1,14 @@
+vendor
+.codesight
+.idea
+.phan
+.phpunit.result.cache
+
+logs
+coverage
+
+docker-compose.yml
+composer.lock
+/var/
+/vendor/
+/mysqldb/

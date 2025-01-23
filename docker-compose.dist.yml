@@ -14,7 +14,34 @@ services:
       dockerfile: etc/artifacts/Dockerfile
       context: .
       target: dev
+    ports:
+      - "9003:9003"
     environment:
-      - XDEBUG_CLIENT_HOST=host.docker.internal
+      - XDEBUG_CLIENT_HOST=172.31.160.1
     volumes:
       - ./:/app:rw,delegated
+      # If you're using Linux you can comment out volumes below
+      - /app/var/
+      - /app/var/cache/
+      - /app/var/logs/
+      - /app/var/sessions/
+    depends_on:
+      - mysql
+  mysql:
+    image: mysql:8.0
+    ports:
+      - "3306:3306"
+    # If you're using Linux you can comment out the line below
+    platform: linux/amd64
+    command: --default-authentication-plugin=mysql_native_password
+    volumes:
+      - ./etc/infrastructure/dev/mysql:/etc/mysql/conf.d:ro
+      - ./mysqldb:/var/lib/mysql
+      - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+    tmpfs:
+      - /tmp/:rw,noexec,nosuid,size=500m
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=framework_database
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=password

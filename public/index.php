@@ -1,5 +1,6 @@
 <?php
 
+use Framework\Response\ApiResponse;
 use Framework\Http\{ServerRequest, Stream, Uri};
 use Framework\Middleware\DefaultMiddleware;
 use Framework\Route;
@@ -14,22 +15,14 @@ $headers = \getallheaders();
 $body = new Stream(fopen('php://input', 'r+'));
 $request = new ServerRequest($method, $uri, $headers, $body, $_SERVER);
 
-$router = $container->get(Route::class);
-$router->addMiddleware(new DefaultMiddleware());
+try {
+    $router = $container->get(Route::class);
+    $router->addMiddleware(new DefaultMiddleware());
+    /** @var ApiResponse $response */
+    $response = $router->dispatch($request);
 
-$response = $router->dispatch($request);
-
-\header(sprintf(
-    'HTTP/%s %s %s',
-    $response->getProtocolVersion(),
-    $response->getStatusCode(),
-    $response->getReasonPhrase()
-));
-
-foreach ($response->getHeaders() as $header => $values) {
-    foreach ($values as $value) {
-        \header(sprintf('%s: %s', $header, $value), false);
-    }
+    echo $response->getContent();
+} catch (\Throwable $e) {
+    \header('HTTP/1.1 500 Internal Server Error');
+    dd($e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile());
 }
-
-echo $response->getBody();

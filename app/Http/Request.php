@@ -42,6 +42,7 @@ class Request extends Message implements RequestInterface
     {
         $clone = clone $this;
         $clone->requestTarget = $requestTarget;
+
         return $clone;
     }
 
@@ -54,6 +55,7 @@ class Request extends Message implements RequestInterface
     {
         $clone = clone $this;
         $clone->method = \strtoupper($method);
+
         return $clone;
     }
 
@@ -72,6 +74,7 @@ class Request extends Message implements RequestInterface
         }
 
         $clone->updateHostFromUri();
+
         return $clone;
     }
 

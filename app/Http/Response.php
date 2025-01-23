@@ -46,6 +46,7 @@ class Response extends Message implements ResponseInterface
     {
         $clone = clone $this;
         $clone->protocolVersion = $version;
+
         return $clone;
     }
 
@@ -68,6 +69,7 @@ class Response extends Message implements ResponseInterface
     {
         $clone = clone $this;
         $clone->headers[\strtolower($name)] = \is_array($value) ? $value : [$value];
+
         return $clone;
     }
 
@@ -79,6 +81,7 @@ class Response extends Message implements ResponseInterface
             $clone->headers[$name] = [];
         }
         $clone->headers[$name] = \array_merge($clone->headers[$name], \is_array($value) ? $value : [$value]);
+
         return $clone;
     }
 
@@ -86,6 +89,7 @@ class Response extends Message implements ResponseInterface
     {
         $clone = clone $this;
         unset($clone->headers[\strtolower($name)]);
+
         return $clone;
     }
 
@@ -98,6 +102,7 @@ class Response extends Message implements ResponseInterface
     {
         $clone = clone $this;
         $clone->body = $body;
+
         return $clone;
     }
 
@@ -110,6 +115,7 @@ class Response extends Message implements ResponseInterface
     {
         $clone = clone $this;
         $clone->setStatusCode($code, $reasonPhrase);
+
         return $clone;
     }
 

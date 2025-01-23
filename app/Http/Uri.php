@@ -51,6 +51,7 @@ class Uri implements UriInterface
         if ($this->port !== null) {
             $authority .= ':' . $this->port;
         }
+
         return $authority;
     }
 
@@ -88,6 +89,7 @@ class Uri implements UriInterface
     {
         $new = clone $this;
         $new->scheme = \strtolower($scheme);
+
         return $new;
     }
 
@@ -95,6 +97,7 @@ class Uri implements UriInterface
     {
         $new = clone $this;
         $new->userInfo = $user . ($password !== null ? ":$password" : '');
+
         return $new;
     }
 
@@ -102,6 +105,7 @@ class Uri implements UriInterface
     {
         $new = clone $this;
         $new->host = \strtolower($host);
+
         return $new;
     }
 
@@ -109,6 +113,7 @@ class Uri implements UriInterface
     {
         $new = clone $this;
         $new->port = $port;
+
         return $new;
     }
 
@@ -119,6 +124,7 @@ class Uri implements UriInterface
         }
         $new = clone $this;
         $new->path = $path;
+
         return $new;
     }
 
