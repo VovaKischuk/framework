@@ -12,3 +12,4 @@ composer.lock
 /var/
 /vendor/
 /mysqldb/
+/coverage/
