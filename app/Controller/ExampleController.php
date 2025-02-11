@@ -2,22 +2,22 @@
 
 namespace Framework\Controller;
 
-use Framework\Http\Response;
+use Framework\Response\ApiResponse;
 
 readonly class ExampleController
 {
-    public function testGet(): Response
+    public function testGet(): ApiResponse
     {
-        return new Response(200, [], 'Get response');
+        return ApiResponse::fromPayload(['message' => 'Get response']);
     }
 
-    public function testPost(): Response
+    public function testPost(): ApiResponse
     {
-        return new Response(200, [], 'Post response');
+        return ApiResponse::fromPayload(['message' => 'Post response']);
     }
 
-    public function testPut(): Response
+    public function testPut(): ApiResponse
     {
-        return new Response(200, [], 'Put response');
+        return ApiResponse::fromPayload(['message' => 'Put response']);
     }
 }

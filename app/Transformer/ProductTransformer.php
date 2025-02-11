@@ -9,7 +9,6 @@ class ProductTransformer extends AbstractTransformer
     public function transform(mixed $data): array
     {
         return [
-            'id' => $data->getId(),
             'name' => $data->getName(),
             'quantity' => $data->getQuantity(),
             'price' => $data->getPrice(),

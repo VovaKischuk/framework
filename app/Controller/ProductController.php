@@ -12,7 +12,8 @@ class ProductController extends AbstractController
 {
     public function __construct(
         private readonly EntityManager $entityManager
-    ) {}
+    ) {
+    }
 
     public function listProducts(): ApiResponse
     {

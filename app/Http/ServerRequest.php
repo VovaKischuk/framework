@@ -12,18 +12,17 @@ class ServerRequest extends Request implements ServerRequestInterface
     private array $attributes = [];
 
     public function __construct(
-        protected string       $method,
+        protected string $method,
         protected UriInterface $uri,
-        protected array        $headers = [],
-        protected mixed        $body = null,
+        protected array $headers = [],
+        protected mixed $body = null,
         private readonly array $serverParams = [],
-        private array          $cookieParams = [],
-        private array          $queryParams = [],
-        private array          $uploadedFiles = [],
-        private mixed          $parsedBody = null,
-        protected string       $protocolVersion = '1.1'
-    )
-    {
+        private array $cookieParams = [],
+        private array $queryParams = [],
+        private array $uploadedFiles = [],
+        private mixed $parsedBody = null,
+        protected string $protocolVersion = '1.1'
+    ) {
         parent::__construct($method, $uri, $body, $headers, $protocolVersion);
         $this->setUploadedFiles($uploadedFiles);
     }

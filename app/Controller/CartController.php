@@ -12,7 +12,8 @@ class CartController extends AbstractController
 {
     public function __construct(
         private readonly EntityManager $entityManager
-    ) {}
+    ) {
+    }
 
     public function addItem(Request $request): ApiResponse
     {

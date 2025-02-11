@@ -15,7 +15,8 @@ class Route
 
     public function __construct(
         private readonly ContainerInterface $container
-    ) {}
+    ) {
+    }
 
     public function addRoute($method, $path, $handler): void
     {

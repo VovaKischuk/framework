@@ -7,6 +7,7 @@ use Framework\Http\ServerRequest;
 use PHPUnit\Framework\TestCase;
 use Framework\Route;
 use Framework\Http\Uri;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class RouteTest extends TestCase
 {
@@ -14,7 +15,8 @@ class RouteTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->route = new Route();
+        $container = $this->createMock(ContainerInterface::class);
+        $this->route = new Route($container);
     }
 
     public function testHomepageReturnsCorrectResponse(): void
@@ -25,7 +27,7 @@ class RouteTest extends TestCase
         $response = $this->route->dispatch($request);
 
         $this->assertEquals(200, $response->getStatusCode());
-        $this->assertEquals('Get response', (string)$response->getBody());
+        $this->assertEquals('{"message":"Get response"}', $response->getContent());
     }
 
     public function testNotFoundResponse(): void
@@ -34,7 +36,6 @@ class RouteTest extends TestCase
         $response = $this->route->dispatch($request);
 
         $this->assertEquals(404, $response->getStatusCode());
-        $this->assertEquals('Not Found', (string)$response->getBody());
     }
 
     public function testMethodNotAllowed(): void

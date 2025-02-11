@@ -3,7 +3,6 @@
 namespace Framework\Tests\Unit\Controller;
 
 use Framework\Controller\ExampleController;
-use Framework\Http\Response;
 use PHPUnit\Framework\TestCase;
 
 class ExampleControllerTest extends TestCase
@@ -20,7 +19,7 @@ class ExampleControllerTest extends TestCase
         $response = $this->controller->testGet();
 
         $this->assertEquals(200, $response->getStatusCode());
-        $this->assertEquals('Get response', $response->getBody());
+        $this->assertEquals('{"message":"Get response"}', $response->getContent());
     }
 
     public function testPostResponse(): void
@@ -28,7 +27,7 @@ class ExampleControllerTest extends TestCase
         $response = $this->controller->testPost();
 
         $this->assertEquals(200, $response->getStatusCode());
-        $this->assertEquals('Post response', $response->getBody());
+        $this->assertEquals('{"message":"Post response"}', $response->getContent());
     }
 
     public function testPutResponse(): void
@@ -36,6 +35,6 @@ class ExampleControllerTest extends TestCase
         $response = $this->controller->testPut();
 
         $this->assertEquals(200, $response->getStatusCode());
-        $this->assertEquals('Put response', $response->getBody());
+        $this->assertEquals('{"message":"Put response"}', $response->getContent());
     }
 }

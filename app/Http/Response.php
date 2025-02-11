@@ -26,13 +26,12 @@ class Response extends Message implements ResponseInterface
     ];
 
     public function __construct(
-        int            $statusCode = 200,
-        private array  $headers = [],
-        private mixed  $body = null,
+        int $statusCode = 200,
+        private array $headers = [],
+        private mixed $body = null,
         private string $reasonPhrase = '',
         private string $protocolVersion = '1.1',
-    )
-    {
+    ) {
         parent::__construct($body, $protocolVersion, $headers);
         $this->setStatusCode($statusCode, $reasonPhrase);
     }
