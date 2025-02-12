@@ -46,38 +46,8 @@ class Order
         return $this->user;
     }
 
-    public function setUser(User $user): void
-    {
-        $this->user = $user;
-    }
-
-    public function getTotalPrice(): float
-    {
-        return $this->totalPrice;
-    }
-
-    public function setTotalPrice(float $totalPrice): void
-    {
-        $this->totalPrice = $totalPrice;
-    }
-
-    public function getCreatedAt(): \DateTime
-    {
-        return $this->createdAt;
-    }
-
-    public function setCreatedAt(\DateTime $createdAt): void
-    {
-        $this->createdAt = $createdAt;
-    }
-
     public function getItems(): Collection
     {
         return $this->items;
-    }
-
-    public function setItems(Collection $items): void
-    {
-        $this->items = $items;
     }
 }

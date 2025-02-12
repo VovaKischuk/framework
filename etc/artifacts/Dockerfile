@@ -1,4 +1,4 @@
-FROM alpine:3.19 as base
+FROM alpine:3.21 as base
 
 RUN apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/community/ --allow-untrusted gnu-libiconv \
     && apk add -U --no-cache \
@@ -38,9 +38,9 @@ RUN apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/co
     php83-xmlwriter \
     php83-simplexml \
     php83-pecl-ast \
-    # Iconv Fix
+    # Iconv Fix \
     && apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/community/ --allow-untrusted php83-pecl-apcu \
-    && ln -s /usr/bin/php83 /usr/bin/php
+    && ln -sf /usr/bin/php83 /usr/bin/php
 
 ADD etc/artifacts/rootfs /
 

@@ -32,11 +32,6 @@ class User
         $this->id = $id;
     }
 
-    public function getUsername(): string
-    {
-        return $this->username;
-    }
-
     public function setUsername(string $username): void
     {
         $this->username = $username;

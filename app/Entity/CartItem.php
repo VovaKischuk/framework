@@ -37,16 +37,6 @@ class CartItem
         return $this->user;
     }
 
-    public function setUser(User $user): void
-    {
-        $this->user = $user;
-    }
-
-    public function getProduct(): Product
-    {
-        return $this->product;
-    }
-
     public function setProduct(Product $product): void
     {
         $this->product = $product;
