@@ -2,6 +2,8 @@
 
 namespace Framework\Tests\Unit\Controller;
 
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityRepository;
 use Framework\Controller\ExampleController;
 use PHPUnit\Framework\TestCase;
 
@@ -11,7 +13,8 @@ class ExampleControllerTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->controller = new ExampleController();
+        $this->entityManager = $this->createMock(EntityManager::class);
+        $this->controller = new ExampleController($this->entityManager);
     }
 
     public function testGetResponse(): void

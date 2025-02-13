@@ -16,7 +16,7 @@ class JWTMiddleware implements MiddlewareInterface
     public function __construct(EntityManager $entityManager)
     {
         $this->entityManager = $entityManager;
-        $this->secretKey = $_ENV['JWT_SECRET_KEY'];
+        $this->secretKey = 'secret_token';
     }
 
     public function process(ServerRequestInterface $request, callable $next): ApiResponse

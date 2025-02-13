@@ -57,4 +57,7 @@ return [
         'DELETE' => [InventoryController::class, 'delete', 'middleware' => [$jwtMiddleware]],
         'PUT' => [InventoryController::class, 'update', 'middleware' => [$jwtMiddleware]],
     ],
+    '/app-demo' => [
+        'GET' => [ExampleController::class, 'appDemo', 'middleware' => false],
+    ],
 ];

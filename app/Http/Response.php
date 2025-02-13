@@ -97,6 +97,11 @@ class Response extends Message implements ResponseInterface
         return $this->body;
     }
 
+    public function getContent(): mixed
+    {
+        return $this->body;
+    }
+
     public function withBody(mixed $body): self
     {
         $clone = clone $this;

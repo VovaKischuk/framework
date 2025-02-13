@@ -3,6 +3,7 @@
 namespace Framework;
 
 use Doctrine\ORM\EntityManager;
+use Framework\Http\Response;
 use Framework\Middleware\MiddlewareInterface;
 use Framework\Response\ApiResponse;
 use Psr\Container\ContainerInterface;
@@ -28,7 +29,7 @@ class Route
         $this->middleware[] = $middleware;
     }
 
-    public function dispatch(Request $request): ApiResponse
+    public function dispatch(Request $request): ApiResponse|Response
     {
         try {
             $method = $request->getMethod();
@@ -80,7 +81,7 @@ class Route
         return $layer($request);
     }
 
-    private function sendResponse(Request $request): ApiResponse
+    private function sendResponse(Request $request): ApiResponse|Response
     {
         try {
             $method = $request->getMethod();
