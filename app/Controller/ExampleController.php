@@ -20,4 +20,11 @@ readonly class ExampleController
     {
         return ApiResponse::fromPayload(['message' => 'Put response']);
     }
+
+    public function fetchAndParseXML(): ApiResponse
+    {
+        //TODO: resource is not available
+        $url = 'https://thetestrequest.com/authors';
+        return ApiResponse::fromPayload(['url' => $url]);
+    }
 }

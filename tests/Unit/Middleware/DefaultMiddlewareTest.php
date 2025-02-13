@@ -4,6 +4,7 @@ namespace Framework\Tests\Unit\Middleware;
 
 use Framework\Http\Response;
 use Framework\Middleware\DefaultMiddleware;
+use Framework\Response\ApiResponse;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -16,12 +17,12 @@ class DefaultMiddlewareTest extends TestCase
 
         $request->method('getHeader')->willReturn(['1']);
         $next = function ($request) {
-            return new Response(200, [], 'Request proceeded');
+            return ApiResponse::fromPayload(['error' => 'Request proceeded'], 200);
         };
 
         $response = $middleware->process($request, $next);
         $this->assertEquals(200, $response->getStatusCode());
-        $this->assertEquals('Request proceeded', $response->getBody());
+        $this->assertEquals(['error' => 'Request proceeded'], json_decode($response->getContent(), true));
     }
 
     public function testProcessStopsOnInvalidHeader(): void
@@ -31,11 +32,11 @@ class DefaultMiddlewareTest extends TestCase
 
         $request->method('getHeader')->willReturn([]);
         $next = function ($request) {
-            return new Response(200, [], 'Request should not proceed');
+            return ApiResponse::fromPayload(['message' => 'Request should not proceed'], 200);
         };
 
         $response = $middleware->process($request, $next);
         $this->assertEquals(403, $response->getStatusCode());
-        $this->assertEquals('Access Denied', $response->getBody());
+        $this->assertEquals(['error' => 'Forbidden'], json_decode($response->getContent(), true));
     }
 }

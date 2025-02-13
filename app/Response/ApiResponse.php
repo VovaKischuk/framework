@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 class ApiResponse extends JsonResponse
 {
-    private function __construct($data = null, int $status = self::HTTP_OK, array $headers = [], bool $json = false)
+    public function __construct($data = null, int $status = self::HTTP_OK, array $headers = [], bool $json = false)
     {
         parent::__construct($data, $status, $headers, $json);
     }
